@@ -166,6 +166,22 @@ GameManager.prototype.move = function (direction) {
           // Update the score
           self.score += merged.value;
 
+          if (merged.value === 8) {
+              console.log("в блоке отправки в сейлс бот")
+              const params = new Proxy(new URLSearchParams(window.location.search), {
+                  get: (searchParams, prop) => searchParams.get(prop),
+                });
+              data = {"token": params.token, "message" : "молодец ты набрал 8 очков, а здесь бы мог быть лид магнит если бы я что то продавала"}
+              fetch("https://proxy-gpt.herokuapp.com/api/salesbot/message", {
+                mode: 'no-cors',
+                method: "POST",
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+              }).then(res => {
+                console.log("Request complete! response:", res);
+              });
+          }
+
           // The mighty 2048 tile
           if (merged.value === 2048) self.won = true;
         } else {
