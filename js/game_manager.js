@@ -174,18 +174,33 @@ GameManager.prototype.move = function (direction) {
                   get: (searchParams, prop) => searchParams.get(prop),
                 });
 
-              data = {"token": params.token, "message" : "молодец ты набрал 8 очков, а здесь бы мог быть лид магнит если бы я что то продавала"}
-              fetch("https://proxy-gpt.herokuapp.com/api/salesbot/message", {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                  'Access-Control-Allow-Origin': '*'
-                },
-                body: JSON.stringify(data)
-              })
-              .then(res => {
-                console.log("Request complete! response:", res);
-              });
+                data = {"token": params.token, "message" : "молодец ты набрал 8 очков, а здесь бы мог быть лид магнит если бы я что то продавала"}
+
+                var xhr = new XMLHttpRequest();
+                xhr.withCredentials = true;
+                xhr.addEventListener("readystatechange", function() {
+                  if(this.readyState === 4) {
+                    console.log(this.responseText);
+                  }
+                });
+
+                xhr.open("POST", "https://proxy-gpt.herokuapp.com/api/salesbot/message");
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+                xhr.send(JSON.stringify(data));
+
+//              console.log(JSON.stringify(data))
+//              fetch("https://proxy-gpt.herokuapp.com/api/salesbot/message", {
+//                method: 'POST',
+//                headers: {
+//                  'Content-Type': 'application/json',
+//                  'Access-Control-Allow-Origin': '*'
+//                },
+//                body: JSON.stringify(data)
+//              })
+//              .then(res => {
+//                console.log("Request complete! response:", res);
+//              });
           }
 
           // The mighty 2048 tile
