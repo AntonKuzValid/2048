@@ -6,20 +6,25 @@ window.requestAnimationFrame(function () {
 const button = document.getElementById('post-btn');
 
 button.addEventListener('click', async _ => {
-  try {
     const params = new Proxy(new URLSearchParams(window.location.search), {
                     get: (searchParams, prop) => searchParams.get(prop),
     });
     data = {"token": params.token, "message" : "молодец ты набрал 8 очков, а здесь бы мог быть лид магнит если бы я что то продавала"}
-    const response = await fetch('https://proxy-gpt.herokuapp.com/api/salesbot/message', {
+    fetch('https://proxy-gpt.herokuapp.com/api/salesbot/message', {
       method: 'post',
       headers: {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': '*'
       },
       body: JSON.stringify(data)
+    })
+    .then(response => {
+       return response.json()
+    })
+    .then(response => {
+       alert(response)
+    })
+    .catch(error => {
+      alert(error)
     });
-  } catch(err) {
-    console.error(`Error: ${err}`);
-  }
 });
