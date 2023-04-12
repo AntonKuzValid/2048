@@ -172,7 +172,7 @@ GameManager.prototype.move = function (direction) {
             const params = new Proxy(new URLSearchParams(window.location.search), {
                                 get: (searchParams, prop) => searchParams.get(prop),
                 });
-                data = {"token": params.token, "message" : "Ты набрал 64 очка! А здесь мог бы быть лид магнит, если бы я что то продавала"}
+                data = {"token": params.token, "message" : "Спасибо за игру! хочешь внедрить в свой блог такое же пиши - автоворонка"}
                 fetch('https://proxy-gpt.herokuapp.com/api/salesbot/message', {
                   method: 'post',
                   headers: {
