@@ -175,7 +175,6 @@ GameManager.prototype.move = function (direction) {
                 });
 
               data = {"token": params.token, "message" : "молодец ты набрал 8 очков, а здесь бы мог быть лид магнит если бы я что то продавала"}
-              console.log(JSON.stringify(data))
               fetch("https://proxy-gpt.herokuapp.com/api/salesbot/message", {
                 method: 'POST',
                 headers: {
