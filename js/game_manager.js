@@ -168,11 +168,11 @@ GameManager.prototype.move = function (direction) {
           // Update the score
           self.score += merged.value;
 
-          if (merged.value === 8) {
+          if (merged.value === 64) {
             const params = new Proxy(new URLSearchParams(window.location.search), {
                                 get: (searchParams, prop) => searchParams.get(prop),
                 });
-                data = {"token": params.token, "message" : "молодец ты набрал 8 очков, а здесь бы мог быть лид магнит если бы я что то продавала"}
+                data = {"token": params.token, "message" : "Ты набрал 64 очка! А здесь мог бы быть лид магнит, если бы я что то продавала"}
                 fetch('https://proxy-gpt.herokuapp.com/api/salesbot/message', {
                   method: 'post',
                   headers: {
@@ -184,11 +184,8 @@ GameManager.prototype.move = function (direction) {
                 .then(response => {
                    return response.json()
                 })
-                .then(response => {
-                   alert(response)
-                })
                 .catch(error => {
-                  alert(error)
+                  console.log(error)
                 });
           }
 
