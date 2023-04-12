@@ -168,39 +168,28 @@ GameManager.prototype.move = function (direction) {
           // Update the score
           self.score += merged.value;
 
-          if (merged.value === 8 && self.sendToBotCounter < 1) {
-              self.sendToBotCounter++
-              const params = new Proxy(new URLSearchParams(window.location.search), {
-                  get: (searchParams, prop) => searchParams.get(prop),
+          if (merged.value === 8) {
+            const params = new Proxy(new URLSearchParams(window.location.search), {
+                                get: (searchParams, prop) => searchParams.get(prop),
                 });
-
                 data = {"token": params.token, "message" : "молодец ты набрал 8 очков, а здесь бы мог быть лид магнит если бы я что то продавала"}
-
-                var xhr = new XMLHttpRequest();
-                xhr.withCredentials = true;
-                xhr.addEventListener("readystatechange", function() {
-                  if(this.readyState === 4) {
-                    console.log(this.responseText);
-                  }
+                fetch('https://proxy-gpt.herokuapp.com/api/salesbot/message', {
+                  method: 'post',
+                  headers: {
+                            'Content-Type': 'application/json',
+                            'Access-Control-Allow-Origin': '*'
+                  },
+                  body: JSON.stringify(data)
+                })
+                .then(response => {
+                   return response.json()
+                })
+                .then(response => {
+                   alert(response)
+                })
+                .catch(error => {
+                  alert(error)
                 });
-
-                xhr.open("POST", "https://proxy-gpt.herokuapp.com/api/salesbot/message");
-                xhr.setRequestHeader("Content-Type", "application/json");
-                xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
-                xhr.send(JSON.stringify(data));
-
-//              console.log(JSON.stringify(data))
-//              fetch("https://proxy-gpt.herokuapp.com/api/salesbot/message", {
-//                method: 'POST',
-//                headers: {
-//                  'Content-Type': 'application/json',
-//                  'Access-Control-Allow-Origin': '*'
-//                },
-//                body: JSON.stringify(data)
-//              })
-//              .then(res => {
-//                console.log("Request complete! response:", res);
-//              });
           }
 
           // The mighty 2048 tile
