@@ -43,12 +43,14 @@ GameManager.prototype.setup = function () {
     this.over        = previousState.over;
     this.won         = previousState.won;
     this.keepPlaying = previousState.keepPlaying;
+    this.sendToBotCounter = previousState.sendToBotCounter;
   } else {
     this.grid        = new Grid(this.size);
     this.score       = 0;
     this.over        = false;
     this.won         = false;
     this.keepPlaying = false;
+    this.sendToBotCounter = 0
 
     // Add the initial tiles
     this.addStartTiles();
@@ -166,21 +168,26 @@ GameManager.prototype.move = function (direction) {
           // Update the score
           self.score += merged.value;
 
-//          if (merged.value === 8) {
-//              console.log("в блоке отправки в сейлс бот")
-//              const params = new Proxy(new URLSearchParams(window.location.search), {
-//                  get: (searchParams, prop) => searchParams.get(prop),
-//                });
-//              data = {"token": params.token, "message" : "молодец ты набрал 8 очков, а здесь бы мог быть лид магнит если бы я что то продавала"}
-//              fetch("https://proxy-gpt.herokuapp.com/api/salesbot/message", {
-//                mode: 'no-cors',
-//                method: "POST",
-//                headers: {'Content-Type': 'application/json'},
-//                body: JSON.stringify(data)
-//              }).then(res => {
-//                console.log("Request complete! response:", res);
-//              });
-//          }
+          if (merged.value === 8 && self.sendToBotCounter < 1) {
+              self.sendToBotCounter++
+              const params = new Proxy(new URLSearchParams(window.location.search), {
+                  get: (searchParams, prop) => searchParams.get(prop),
+                });
+
+              data = {"token": params.token, "message" : "молодец ты набрал 8 очков, а здесь бы мог быть лид магнит если бы я что то продавала"}
+              console.log(JSON.stringify(data))
+              fetch("https://proxy-gpt.herokuapp.com/api/salesbot/message", {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Access-Control-Allow-Origin': '*'
+                },
+                body: JSON.stringify(data)
+              })
+              .then(res => {
+                console.log("Request complete! response:", res);
+              });
+          }
 
           // The mighty 2048 tile
           if (merged.value === 2048) self.won = true;
